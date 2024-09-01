@@ -47,21 +47,10 @@ while True:
         photos = data['response']['items']
 
         def determine_max_photo_res(item):
-            sizes = []
-            for size in item['sizes']:
-                sizes.append(size['type'])
-            if 'w' in sizes:
-                return item['sizes'][sizes.index('w')]['url']
-            elif 'z' in sizes:
-                return item['sizes'][sizes.index('z')]['url']
-            elif 'y' in sizes:
-                return item['sizes'][sizes.index('y')]['url']
-            elif 'x' in sizes:
-                return item['sizes'][sizes.index('x')]['url']
-            elif 'm' in sizes:
-                return item['sizes'][sizes.index('m')]['url']
-            elif 's' in sizes:
-                return item['sizes'][sizes.index('s')]['url']
+            sizes = [size['type'] for size in item['sizes']]
+            for size in 'wzyxms':
+                if size in sizes:
+                    return item['sizes'][sizes.index(size)]['url']
         
         # Create a list of dictionaries, each containing the url and filename
         photos_to_download = [{'url': determine_max_photo_res(photo), 'filename': f"photo-{abs(photo['owner_id'])}_{photo['id']}.jpg"} for photo in photos]
